@@ -1,9 +1,9 @@
 name: Build and Test React Application
 on: 
   push: 
-    branches: [ main ]
+    branches: [ feature/projet-individuel ]
   pull_request: 
-    branches: [ main ]
+    branches: [ feature/projet-individuel ]
 jobs: 
   build_test:
     permissions: 
