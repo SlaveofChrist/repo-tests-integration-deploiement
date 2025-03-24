@@ -34,19 +34,19 @@ export default function UserRegistrationForm() {
       <h2>Inscription</h2>
       <div>
         <label>Prénom:</label>
-        <input id="firstName" value={formData.firstName} onChange={handleChange} required />
+        <input data-testid="firstName" value={formData.firstName} onChange={handleChange} required />
       </div>
       <div>
         <label>Nom:</label>
-        <input id="lastName" value={formData.lastName} onChange={handleChange} required />
+        <input data-testid="lastName" value={formData.lastName} onChange={handleChange} required />
       </div>
       <div>
         <label>Email:</label>
-        <input type="email" id="email" value={formData.email} onChange={handleChange} required />
+        <input type="email" data-testid="email" value={formData.email} onChange={handleChange} required />
       </div>
       <div>
         <label>Date de naissance:</label>
-        <input id="birth-date" value={formData.birthDate} onChange={handleChange} required />
+        <input data-testid="birth-date" value={formData.birthDate} onChange={handleChange} required />
         {!isAgeValid && (
           <span style={{ color: 'red' }}>
             L'utilisateur ne peut avoir moins de 18 ans.
@@ -55,13 +55,13 @@ export default function UserRegistrationForm() {
       </div>
       <div>
         <label>Ville:</label>
-        <input id="city" value={formData.city} onChange={handleChange} required />
+        <input data-testid="city" value={formData.city} onChange={handleChange} required />
       </div>
       <div>
         <label>Code postal:</label>
-        <input id="postalCode" value={formData.postalCode} onChange={handleChange} required />
+        <input data-testid="postalCode" value={formData.postalCode} onChange={handleChange} required />
       </div>
-      <button type="submit" id="submitButton">Enregistrer</button>
+      <button type="submit" data-testid="submitButton">Enregistrer</button>
     </form>
   );
 }
