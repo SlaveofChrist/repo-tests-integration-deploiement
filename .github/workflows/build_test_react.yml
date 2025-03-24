@@ -35,6 +35,8 @@ jobs:
           if-no-files-found: error
       - name: Generate JSDoc
         run: npm run jsdoc
+        with: 
+          path: my-app/public
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
