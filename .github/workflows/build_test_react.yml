@@ -33,6 +33,8 @@ jobs:
         with: 
           path: my-app/build
           if-no-files-found: error
+      - name: Generate JSDoc
+        run: npm run jsdoc
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
