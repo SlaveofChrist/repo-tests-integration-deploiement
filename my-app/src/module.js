@@ -14,4 +14,34 @@ function calculateAge(p){
     return age
 }
 
-export {calculateAge}
+/**
+ * Validate a person's name.
+ *
+ * @param {string} name The name to validate.
+ * @return {boolean} True if the name is valid, otherwise false.
+ */
+ const validateName = (name) => {
+    return /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/.test(name);
+  };
+  
+  /**
+ * Validate an email address.
+ *
+ * @param {string} email The email to validate.
+ * @return {boolean} True if the email is valid, otherwise false.
+ */
+    const validateEmail = (email) => {
+    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/.test(email);
+  };
+  
+  /**
+ * Validate a French postal code.
+ *
+ * @param {string} postalCode The postal code to validate.
+ * @return {boolean} True if the postal code is valid, otherwise false.
+ */
+  const validatePostalCode = (postalCode) => {
+    return /^[0-9]{5}$/.test(postalCode);
+  };
+
+export {calculateAge,validateName,validateEmail,validatePostalCode}

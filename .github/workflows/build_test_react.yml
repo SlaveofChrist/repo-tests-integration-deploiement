@@ -26,6 +26,30 @@ jobs:
           npm run jsdoc
           npm run build --if-present
           npm test
+      - name: Get package version
+        id: package_version
+        run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      - name: Get published version from npm
+        id: npm_version
+        run: |
+          PUBLISHED_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.0.0")
+          echo "PUBLISHED_VERSION=$PUBLISHED_VERSION" >> $GITHUB_ENV
+
+      - name: Compare versions
+        id: check_version
+        run: |
+          if [ "$VERSION" != "$PUBLISHED_VERSION" ]; then
+            echo "SHOULD_PUBLISH=true" >> $GITHUB_ENV
+          else
+            echo "SHOULD_PUBLISH=false" >> $GITHUB_ENV
+          fi
+
+      - name: Publish to npm
+        if: env.SHOULD_PUBLISH == 'true'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
@@ -39,6 +63,7 @@ jobs:
         with:
           file: './my-app/coverage/clover.xml'
           token: ${{ secrets.CODECOV_TOKEN }}
+      
 # Deploy job
   deploy:
  # Deploy to the github-pages environment
