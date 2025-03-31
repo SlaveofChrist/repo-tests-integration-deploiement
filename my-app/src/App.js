@@ -69,7 +69,7 @@ export default function UserRegistrationForm() {
 
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { validateName, validateEmail, validatePostalCode, validateAge } from "./module";
+import { validateName, validateEmail, validatePostalCode, calculateAge } from "./module";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -104,7 +104,7 @@ const RegistrationForm = () => {
       validateName(data.lastName) &&
       validateEmail(data.email) &&
       validatePostalCode(data.postalCode) &&
-      validateAge(data.birthDate)
+      calculateAge(data)
     ) {
       localStorage.setItem("user", JSON.stringify(data));
       toast.success("Enregistrement réussi !");
@@ -125,7 +125,7 @@ const RegistrationForm = () => {
       <input type="email" placeholder="Email" {...register("email", { validate: validateEmail })} />
       {errors.email && <p style={{ color: "red" }}>Email invalide</p>}
       
-      <input type="date" placeholder="Date de naissance" {...register("birthDate", { validate: validateAge })} />
+      <input type="date" placeholder="Date de naissance" {...register("birthDate", { validate: calculateAge })} />
       {errors.birthDate && <p style={{ color: "red" }}>Vous devez avoir plus de 18 ans</p>}
       
       <input type="text" placeholder="Ville" {...register("city", { required: true })} />
