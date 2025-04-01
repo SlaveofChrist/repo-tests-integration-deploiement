@@ -73,7 +73,6 @@ import { validateName, validateEmail, validatePostalCode, calculateAge } from ".
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-toast.configure();
 
 const RegistrationForm = () => {
   const {

@@ -31,7 +31,7 @@ function calculateAge(p){
  * @return {boolean} True if the email is valid, otherwise false.
  */
     const validateEmail = (email) => {
-    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/.test(email);
+    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
   };
   
   /**

@@ -42,7 +42,7 @@ import App from './App'; */
 
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import RegistrationForm from "../RegistrationForm";
+import RegistrationForm from "./App";
 import { toast } from "react-toastify";
 
 jest.mock("react-toastify", () => ({
