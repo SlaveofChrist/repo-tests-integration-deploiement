@@ -82,7 +82,8 @@ const RegistrationForm = () => {
     formState: { errors },
     reset
   } = useForm();
-
+  
+  //console.log(errors);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const watchFields = watch();
 
@@ -105,12 +106,14 @@ const RegistrationForm = () => {
       validatePostalCode(data.postalCode) &&
       calculateAge(data)
     ) {
+     
       localStorage.setItem("user", JSON.stringify(data));
       toast.success("Enregistrement réussi !");
       reset();
     } else {
-      toast.error("Veuillez corriger les erreurs.");
+      console.log("Données soumises :", data);
     }
+    
   };
 
   return (

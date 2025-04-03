@@ -1,17 +1,20 @@
 /**
- * Calculate a person's age in years
- * 
- * @param {object} p An object representing a person, implementing a birth Date parameter. 
- * @return {number} The age in years of p
+ * Check if a person is at least 18 years old.
+ *
+ * @param {string} birthDate The birth date in YYYY-MM-DD format.
+ * @return {boolean} True if the person is 18 or older, otherwise false.
  */
-function calculateAge(p){
-    if(!p) {
+function calculateAge(birthDate){
+    /* if(!p) {
         throw new Error("missing param p")
         }
     //if(p )   
     let dateDiff = new Date(Date.now() - p.birth.getTime())
     let age = Math.abs(dateDiff.getUTCFullYear() - 1970);
-    return age
+    return age */
+    const birthYear = new Date(birthDate).getFullYear();
+  const currentYear = new Date().getFullYear();
+  return currentYear - birthYear >= 18;
 }
 
 /**
@@ -21,7 +24,7 @@ function calculateAge(p){
  * @return {boolean} True if the name is valid, otherwise false.
  */
  const validateName = (name) => {
-    return /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/.test(name);
+    return /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/.test(name)
   };
   
   /**

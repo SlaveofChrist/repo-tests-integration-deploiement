@@ -41,7 +41,7 @@ import App from './App'; */
 //}); 
 
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent,waitFor, act} from "@testing-library/react";
 import RegistrationForm from "./App";
 import { toast } from "react-toastify";
 
@@ -82,19 +82,27 @@ describe("RegistrationForm - Tests d'intégration", () => {
     fireEvent.input(screen.getByPlaceholderText("Code Postal"), {
       target: { value: "123A" },
     });
+    
 
-    fireEvent.click(screen.getByRole("button", { name: /s'inscrire/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText(/prénom invalide/i)).toBeInTheDocument();
-      expect(screen.getByText(/nom invalide/i)).toBeInTheDocument();
-      expect(screen.getByText(/email invalide/i)).toBeInTheDocument();
-      expect(screen.getByText(/vous devez avoir plus de 18 ans/i)).toBeInTheDocument();
-      expect(screen.getByText(/code postal invalide/i)).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: /s'inscrire/i }));
     });
+    
+    
+    await waitFor(() => {
+      expect(screen.getByText(/Prénom invalide/i)).toBeInTheDocument();
+      expect(screen.getByText(/Prénom invalide/i)).toBeInTheDocument();
+      expect(screen.getByText(/Nom invalide/i)).toBeInTheDocument();
+      expect(screen.getByText(/Email invalide/i)).toBeInTheDocument();
+      expect(screen.getByText(/Vous devez avoir plus de 18 ans/i)).toBeInTheDocument();
+      expect(screen.getByText(/Code postal invalide/i)).toBeInTheDocument();
+    });
+    
+    console.log("Erreurs dans le terminal : ", screen.getByText(/prénom invalide/i));
+
   });
 
-  test("Sauvegarde dans le localStorage et affiche un toaster de succès", async () => {
+  test("Sauvegarde dans le localStorage et affiche un toaster de succès", () => {
     render(<RegistrationForm />);
 
     fireEvent.input(screen.getByPlaceholderText("Prénom"), {
@@ -123,13 +131,11 @@ describe("RegistrationForm - Tests d'intégration", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /s'inscrire/i }));
 
-    await waitFor(() => {
-      expect(localStorage.getItem("user")).not.toBeNull();
-      expect(toast.success).toHaveBeenCalledWith("Enregistrement réussi !");
-    });
+    expect(localStorage.getItem("user")).not.toBeNull();
+    expect(toast.success).toHaveBeenCalledWith("Enregistrement réussi !");
   });
 
-  test("Affiche un toaster d'erreur si la validation échoue", async () => {
+  test("Affiche un toaster d'erreur si la validation échoue",  () => {
     render(<RegistrationForm />);
 
     fireEvent.input(screen.getByPlaceholderText("Prénom"), {
@@ -146,8 +152,6 @@ describe("RegistrationForm - Tests d'intégration", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /s'inscrire/i }));
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith("Veuillez corriger les erreurs.");
-    });
+    expect(toast.error).toHaveBeenCalledWith("Veuillez corriger les erreurs.");
   });
 });
