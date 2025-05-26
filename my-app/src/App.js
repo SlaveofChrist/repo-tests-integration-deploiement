@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+/* import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validateName, validateEmail, validatePostalCode, calculateAge } from "./module";
 import { toast } from "react-toastify";
@@ -73,3 +73,39 @@ const RegistrationForm = () => {
 };
 
 export default RegistrationForm;
+ */
+
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+
+function App() {
+  const port = process.env.REACT_APP_SERVER_PORT
+  let [usersCount, setUsersCount] = useState(0);
+
+  useEffect(() => {
+    async function countUsers() {
+      try {
+        const api = axios.create({
+          baseURL: `http://localhost:${port}`
+        });
+        const response = await api.get(`users`);
+        console.log(response)
+        setUsersCount(response.data.users.length)
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    countUsers()
+  }, [])
+
+  return (
+    <div className='App'>
+      <header className='App-header'>
+        <h1>Users manager v2</h1>
+        <p>{usersCount} user(s) already registered</p>
+      </header>
+    </div>
+  )
+}
+
+export default App;

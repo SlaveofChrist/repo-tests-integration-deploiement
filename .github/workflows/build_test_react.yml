@@ -26,6 +26,8 @@ jobs:
           npm run jsdoc
           npm run build --if-present
           npm test
+      - name: Build the stack
+        run: docker compose up -d
       - name: Get package version
         id: package_version
         run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
