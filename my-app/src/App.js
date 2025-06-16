@@ -49,7 +49,7 @@ const RegistrationForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input type="text" placeholder="Prénom" {...register("firstName", { validate: validateName })} />
+      <input type="text" data-testid="prenom" placeholder="Prénom" {...register("firstName", { validate: validateName })} />
       {errors.firstName && <p style={{ color: "red" }}>Prénom invalide</p>}
       
       <input type="text" placeholder="Nom" {...register("lastName", { validate: validateName })} />
