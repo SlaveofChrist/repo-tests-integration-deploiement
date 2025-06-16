@@ -4,6 +4,8 @@ version: '3.1'
 services:
   db:
     image: mysql:9.2
+    build:
+      context: ./
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
@@ -18,12 +20,16 @@ services:
   
   adminer:
     image: adminer
+    build:
+      context: .
     restart: always
     ports:
       - 8080:8080
 
   api-python:
     image: python_image
+    build:
+      context: ./server/
     restart: always
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -42,6 +48,8 @@ services:
   
   react: 
     image: react
+    build:
+      context: ./my-app/
     build: ./my-app
     ports:
       - 3000:3000
