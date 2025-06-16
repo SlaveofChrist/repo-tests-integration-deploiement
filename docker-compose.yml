@@ -48,8 +48,6 @@ services:
   
   react: 
     image: react
-    build:
-      context: ./my-app/
     build: ./my-app
     ports:
       - 3000:3000
