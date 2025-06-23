@@ -51,6 +51,7 @@ jobs:
           fi
 
       - name: Publish to npm
+        working-directory: my-app
         if: env.SHOULD_PUBLISH == 'true'
         run: npm publish
         env:
