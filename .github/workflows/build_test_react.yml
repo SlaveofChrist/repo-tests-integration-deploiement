@@ -26,6 +26,8 @@ jobs:
           npm run jsdoc
           npm run build --if-present
           npm test
+        env:
+          REACT_APP_SERVER_URL=${{secrets.REACT_APP_SERVER_URL}}
       - name: Build the stack
         run: docker compose up -d
       - name: Get package version

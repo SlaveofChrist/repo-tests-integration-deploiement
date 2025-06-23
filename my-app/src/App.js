@@ -82,11 +82,11 @@ function App() {
   let [usersCount, setUsersCount] = useState(0);
 
   useEffect(() => {
-    const port = process.env.REACT_APP_SERVER_PORT
+    const url = process.env.REACT_APP_SERVER_URL
     async function countUsers() {
       try {
         const api = axios.create({
-          baseURL: `http://localhost:${port}`
+          baseURL: url
         });
         const response = await api.get(`users`);
         console.log(response)
