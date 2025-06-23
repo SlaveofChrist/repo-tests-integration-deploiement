@@ -37,6 +37,7 @@ jobs:
       - name: Get published version from npm
         id: npm_version
         run: |
+          cd my-app
           PUBLISHED_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.0.0")
           echo "PUBLISHED_VERSION=$PUBLISHED_VERSION" >> $GITHUB_ENV
 
