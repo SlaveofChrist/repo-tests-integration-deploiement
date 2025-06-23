@@ -1,9 +1,9 @@
 name: Build and Test React Application
 on: 
   push: 
-    branches: [ main ]
+    branches: [ feature/projet-individuel ]
   pull_request: 
-    branches: [ main ]
+    branches: [ feature/projet-individuel ]
 jobs: 
   build_test:
     permissions: 
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x,21.x]
+        node-version: [20.x]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
@@ -20,11 +20,38 @@ jobs:
         with: 
           node-version: ${{ matrix.node-version }}
       - name: npm ci, build and test
-        run: 
+        run: |
           cd my-app
           npm ci
+          npm run jsdoc
           npm run build --if-present
           npm test
+      - name: Build the stack
+        run: docker compose up -d
+      - name: Get package version
+        id: package_version
+        run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      - name: Get published version from npm
+        id: npm_version
+        run: |
+          PUBLISHED_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.0.0")
+          echo "PUBLISHED_VERSION=$PUBLISHED_VERSION" >> $GITHUB_ENV
+
+      - name: Compare versions
+        id: check_version
+        run: |
+          if [ "$VERSION" != "$PUBLISHED_VERSION" ]; then
+            echo "SHOULD_PUBLISH=true" >> $GITHUB_ENV
+          else
+            echo "SHOULD_PUBLISH=false" >> $GITHUB_ENV
+          fi
+
+      - name: Publish to npm
+        if: env.SHOULD_PUBLISH == 'true'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
@@ -33,6 +60,12 @@ jobs:
         with: 
           path: my-app/build
           if-no-files-found: error
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          file: './my-app/coverage/clover.xml'
+          token: ${{ secrets.CODECOV_TOKEN }}
+      
 # Deploy job
   deploy:
  # Deploy to the github-pages environment
@@ -50,3 +83,4 @@ jobs:
      - name: Deploy to GitHub Pages
        id: deployment
        uses: actions/deploy-pages@v4
+     

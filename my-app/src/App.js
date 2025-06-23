@@ -1,0 +1,111 @@
+/* import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { validateName, validateEmail, validatePostalCode, calculateAge } from "./module";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
+const RegistrationForm = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset
+  } = useForm();
+  
+  //console.log(errors);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const watchFields = watch();
+
+  useEffect(() => {
+    setIsButtonDisabled(
+      !watchFields.firstName ||
+      !watchFields.lastName ||
+      !watchFields.email ||
+      !watchFields.birthDate ||
+      !watchFields.city ||
+      !watchFields.postalCode
+    );
+  }, [watchFields]);
+
+  const onSubmit = (data) => {
+    if (
+      validateName(data.firstName) &&
+      validateName(data.lastName) &&
+      validateEmail(data.email) &&
+      validatePostalCode(data.postalCode) &&
+      calculateAge(data)
+    ) {
+     
+      localStorage.setItem("user", JSON.stringify(data));
+      toast.success("Enregistrement réussi !");
+      reset();
+    } else {
+      console.log("Données soumises :", data);
+    }
+    
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input type="text" data-testid="prenom" placeholder="Prénom" {...register("firstName", { validate: validateName })} />
+      {errors.firstName && <p style={{ color: "red" }}>Prénom invalide</p>}
+      
+      <input type="text" placeholder="Nom" {...register("lastName", { validate: validateName })} />
+      {errors.lastName && <p style={{ color: "red" }}>Nom invalide</p>}
+      
+      <input type="email" placeholder="Email" {...register("email", { validate: validateEmail })} />
+      {errors.email && <p style={{ color: "red" }}>Email invalide</p>}
+      
+      <input type="date" placeholder="Date de naissance" {...register("birthDate", { validate: calculateAge })} />
+      {errors.birthDate && <p style={{ color: "red" }}>Vous devez avoir plus de 18 ans</p>}
+      
+      <input type="text" placeholder="Ville" {...register("city", { required: true })} />
+      {errors.city && <p style={{ color: "red" }}>Ville requise</p>}
+      
+      <input type="text" placeholder="Code Postal" {...register("postalCode", { validate: validatePostalCode })} />
+      {errors.postalCode && <p style={{ color: "red" }}>Code postal invalide</p>}
+      
+      <button type="submit" disabled={isButtonDisabled}>S'inscrire</button>
+    </form>
+  );
+};
+
+export default RegistrationForm;
+ */
+
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+
+function App() {
+  let [usersCount, setUsersCount] = useState(0);
+
+  useEffect(() => {
+    const port = process.env.REACT_APP_SERVER_PORT
+    async function countUsers() {
+      try {
+        const api = axios.create({
+          baseURL: `http://localhost:${port}`
+        });
+        const response = await api.get(`users`);
+        console.log(response)
+        setUsersCount(response.data.users.length)
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    countUsers()
+  }, [])
+
+  return (
+    <div className='App'>
+      <header className='App-header'>
+        <h1>Users manager v2</h1>
+        <p>{usersCount} user(s) already registered</p>
+      </header>
+    </div>
+  )
+}
+
+export default App;
