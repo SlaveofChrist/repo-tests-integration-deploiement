@@ -33,7 +33,7 @@ jobs:
       - name: Get package version
         id: package_version
         run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
-       - name: Authenticate with npm
+      - name: Authenticate with npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Get published version from npm
         id: npm_version
