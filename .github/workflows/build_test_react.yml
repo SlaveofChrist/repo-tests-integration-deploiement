@@ -30,31 +30,24 @@ jobs:
           REACT_APP_SERVER_URL: ${{secrets.REACT_APP_SERVER_URL}}
       - name: Build the stack
         run: docker compose up -d
-      - name: Get package version
-        id: package_version
-        run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
       - name: Authenticate with npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-      - name: Get published version from npm
-        id: npm_version
-        run: |
-          cd my-app
-          PUBLISHED_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.0.0")
-          echo "PUBLISHED_VERSION=$PUBLISHED_VERSION" >> $GITHUB_ENV
-
-      - name: Compare versions
-        id: check_version
-        run: |
-          if [ "$VERSION" != "$PUBLISHED_VERSION" ]; then
-            echo "SHOULD_PUBLISH=true" >> $GITHUB_ENV
+      - name : check version
+        run : |
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          NPM_VERSION=$(npm view ci-cd-ynov version)
+          if [ "$LOCAL_VERSION" != "$NPM_VERSION" ]; then
+            echo "NEW_VERSION=true" >> $GITHUB_ENV
           else
-            echo "SHOULD_PUBLISH=false" >> $GITHUB_ENV
+            echo "NEW_VERSION=false" >> $GITHUB_ENV
           fi
-
-      - name: Publish to npm
-        working-directory: my-app
-        if: env.SHOULD_PUBLISH == 'true'
-        run: npm publish
+      - name: build and publish package on NPM 📦
+        if: env.NEW_VERSION == 'true'
+        run: |
+          git config --global user.email "elielwotobe@gmail.com"
+          git config --global user.name "Eliel"
+          npm run build-npm
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Setup Pages
