@@ -34,6 +34,7 @@ jobs:
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name : check version
         run : |
+          cd my-app
           LOCAL_VERSION=$(node -p "require('./package.json').version")
           NPM_VERSION=$(npm view ci-cd-ynov version)
           if [ "$LOCAL_VERSION" != "$NPM_VERSION" ]; then
