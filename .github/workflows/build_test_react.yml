@@ -43,6 +43,7 @@ jobs:
             echo "NEW_VERSION=false" >> $GITHUB_ENV
           fi
       - name: build and publish package on NPM 📦
+        working-directory: my-app
         if: env.NEW_VERSION == 'true'
         run: |
           git config --global user.email "elielwotobe@gmail.com"
