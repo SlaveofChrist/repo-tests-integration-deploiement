@@ -75,7 +75,7 @@ const RegistrationForm = () => {
 export default RegistrationForm;
  */
 
-import axios from 'axios';
+/* import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -106,6 +106,146 @@ function App() {
       </header>
     </div>
   )
+} */
+
+import React, { useState } from "react";
+
+function App() {
+  const [formData, setFormData] = useState({
+    lastName: "",
+    firstName: "",
+    email: "",
+    birthDate: "",
+    city: "",
+    postalCode: "",
+  });
+
+  const url = process.env.REACT_APP_SERVER_URL
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    
+    if (
+      !formData.lastName ||
+      !formData.firstName ||
+      !formData.email ||
+      !formData.birthDate ||
+      !formData.city ||
+      !formData.postalCode
+    ) {
+      setMessage("Merci de remplir tous les champs.");
+      return;
+    }
+
+    try {
+      const response = await fetch(url/"users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setMessage("Utilisateur enregistré avec succès !");
+        setFormData({
+          lastName: "",
+          firstName: "",
+          email: "",
+          birthDate: "",
+          city: "",
+          postalCode: "",
+        });
+      } else {
+        const data = await response.json();
+        setMessage(data.error || "Erreur lors de l'enregistrement.");
+      }
+    } catch (error) {
+      setMessage("Erreur réseau ou serveur.");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Nom :</label>
+        <input
+          type="text"
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div>
+        <label>Prénom :</label>
+        <input
+          type="text"
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div>
+        <label>Email :</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div>
+        <label>Date de naissance :</label>
+        <input
+          type="date"
+          name="birthDate"
+          value={formData.birthDate}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div>
+        <label>Ville :</label>
+        <input
+          type="text"
+          name="city"
+          value={formData.city}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div>
+        <label>Code postal :</label>
+        <input
+          type="text"
+          name="postalCode"
+          value={formData.postalCode}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <button type="submit">Enregistrer</button>
+
+      {message && <p>{message}</p>}
+    </form>
+  );
 }
+
 
 export default App;

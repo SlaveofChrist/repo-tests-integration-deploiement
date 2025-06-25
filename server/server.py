@@ -1,7 +1,17 @@
 import mysql.connector
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, EmailStr
+from datetime import datetime
+
+class UserCreate(BaseModel):
+    lastName: str
+    firstName: str
+    email: EmailStr
+    birthDate: datetime  
+    city: str
+    postalCode: str
 
 app = FastAPI()
 origins = ["https://slaveofchrist.github.io","http://localhost:3000"]
@@ -31,3 +41,32 @@ async def get_users():
     records = cursor.fetchall()
     print("Total number of rows in table: ",cursor.rowcount)
     return {'users': records}
+
+@app.post("/users")
+async def create_user(user: UserCreate):
+    try:
+        cursor = conn.cursor()
+        insert_query = """
+            INSERT INTO users (lastName, firstName, email, birthDate, city, postalCode)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        values = (
+            user.lastName,
+            user.firstName,
+            user.email,
+            user.birthDate.strftime("%Y-%m-%d %H:%M:%S"),
+            user.city,
+            user.postalCode
+        )
+
+        cursor.execute(insert_query, values)
+        conn.commit()
+        return {"message": "Utilisateur enregistré avec succès."}
+    
+    except mysql.connector.IntegrityError as e:
+        if "Duplicate entry" in str(e):
+            raise HTTPException(status_code=409, detail="Email déjà utilisé.")
+        raise HTTPException(status_code=400, detail=f"Erreur d'intégrité : {e}")
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur serveur : {e}")
