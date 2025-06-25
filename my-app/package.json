@@ -1,7 +1,7 @@
 {
   "name": "ci-cd-eliel",
   "homepage": "https://SlaveofChrist.github.io/repo-tests-integration-deploiement",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "dependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
