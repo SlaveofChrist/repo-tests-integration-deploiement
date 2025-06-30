@@ -131,7 +131,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
+
     if (
       !formData.lastName ||
       !formData.firstName ||
@@ -145,7 +145,7 @@ function App() {
     }
 
     try {
-      const response = await fetch(url/"users", {
+      const response = await fetch(`${url}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
