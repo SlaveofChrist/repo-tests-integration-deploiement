@@ -14,7 +14,7 @@ class UserCreate(BaseModel):
     postalCode: str
 
 app = FastAPI()
-origins = ["https://slaveofchrist.github.io","http://localhost:3000"]
+origins = ["https://slaveofchrist.github.io/repo-tests-integration-deploiement/","http://localhost:3000"]
 
 app.add_middleware(
     CORSMiddleware,
