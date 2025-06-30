@@ -2,6 +2,7 @@ import mysql.connector
 import os
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
@@ -32,6 +33,15 @@ conn = mysql.connector.connect(
     host= os.getenv("MYSQL_HOST")
 )
 
+@app.options("/users")
+async def options_users(request: Request):
+    response = Response()
+    response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", "*")
+    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS, DELETE"
+    response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    response.status_code = 204  # No Content
+    return response
 
 @app.get("/users")
 async def get_users(): 
