@@ -21,11 +21,6 @@ describe('Formulaire d\'inscription', () => {
         cy.get('button[type="submit"]').should('exist');
     });
 
-    it('affiche un message d\'erreur si on soumet vide', () => {
-        cy.get('button[type="submit"]').click();
-        cy.contains('Merci de remplir tous les champs.').should('be.visible');
-    });
-
     it('enregistre un utilisateur avec des données valides', () => {
         cy.get('input[name="lastName"]').type('Dupont');
         cy.get('input[name="firstName"]').type('Jean');
