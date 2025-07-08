@@ -113,3 +113,33 @@ describe.skip("RegistrationForm - Tests d'intégration", () => {
     expect(toast.error).toHaveBeenCalledWith("Veuillez corriger les erreurs.");
   });
 });
+
+const { TextEncoder, TextDecoder } = require('util');
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+
+
+const request = require("supertest");
+const baseURL = process.env.REACT_APP_SERVER_URL;
+
+describe('API /users', () => {
+  it.skip('should register a new user with valid data', async () => {
+    const userData = {
+      lastName: 'Dupont',
+      firstName: 'Jean',
+      email: `jean.dupont${Date.now()}@example.com`, // pour éviter les doublons
+      birthDate: '1990-01-01',
+      city: 'Paris',
+      postalCode: '75000',
+    };
+    const response = await request(baseURL)
+      .post('/users')
+      .send(userData)
+      .set('Accept', 'application/json');
+    console.log(response.error);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message');
+    // Optionnel : vérifier le message exact si connu
+    // expect(response.body.message).toBe('Utilisateur enregistré avec succès !');
+  });
+});
