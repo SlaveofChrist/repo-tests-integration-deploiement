@@ -44,6 +44,8 @@ jobs:
           REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }}
       - name: Run end-to-end tests with Cypress
         uses: cypress-io/github-action@v6
+        with:
+          working-directory: my-app
       - name: Authenticate with npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name : check version
