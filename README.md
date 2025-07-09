@@ -1,8 +1,8 @@
 # 🚀 Projet CI/CD - Tests, Intégration et Déploiement
 
 ## 👥 Équipe de développement
-- **WOTOBE Eliel** - Développement Frontend & Tests
-- **ALIEBONG** - Développement Backend & Architecture
+- **WOTOBE Eliel** 
+- **ALIEBONG** 
 
 ---
 
