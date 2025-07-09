@@ -117,7 +117,7 @@ jobs:
       - name: Declencher terraform
         run: |
           OWNER="SlaveofChrist"
-          REPO="repo-terraform"
+          REPO="mongo-db-node-js"
           API_URL="https://api.github.com/repos/${OWNER}/${REPO}/dispatches"
           
           curl -L \
